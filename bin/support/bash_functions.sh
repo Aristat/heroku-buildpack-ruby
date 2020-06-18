@@ -29,11 +29,16 @@ heroku_buildpack_ruby_install_ruby()
   # when the buildpack is deployed we vendor a ruby executable
   # at this location so it doesn't have to be downloaded for
   # every app compile
+
+  echo "heroku_buildpack_ruby_install_ruby_1 $(date -u +"%T")"
   if [ ! -d "$heroku_buildpack_ruby_dir" ]; then
     heroku_buildpack_ruby_dir=$(mktemp -d)
     # bootstrap ruby
+    echo "heroku_buildpack_ruby_install_ruby_2 $(date -u +"%T")"
     $bin_dir/support/download_ruby "$BIN_DIR" "$heroku_buildpack_ruby_dir"
+    echo "heroku_buildpack_ruby_install_ruby_3 $(date -u +"%T")"
     function atexit {
+      echo "heroku_buildpack_ruby_install_ruby_4 $(date -u +"%T")"
       rm -rf $heroku_buildpack_ruby_dir
     }
     trap atexit EXIT
