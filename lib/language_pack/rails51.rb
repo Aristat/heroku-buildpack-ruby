@@ -37,21 +37,27 @@ class LanguagePack::Rails51 < LanguagePack::Rails5
           precompile = rake.task("assets:precompile")
           return true unless precompile.is_defined?
 
-          topic("Preparing app for Rails asset pipeline")
+          topic("Preparing app for Rails asset pipeline, #{Time.now.utc.strftime("%k:%M:%S")}")
 
           load_asset_cache
 
+          topic ("load_asset_cache done, #{Time.now.utc.strftime("%k:%M:%S")}")
+
           precompile.invoke(env: rake_env)
+
+          topic ("precompile.invoke done, #{Time.now.utc.strftime("%k:%M:%S")}")
 
           if precompile.success?
             log "assets_precompile", :status => "success"
             puts "Asset precompilation completed (#{"%.2f" % precompile.time}s)"
 
-            puts "Cleaning assets"
+            puts "Cleaning assets, #{Time.now.utc.strftime("%k:%M:%S")}"
             rake.task("assets:clean").invoke(env: rake_env)
 
             cleanup_assets_cache
             store_asset_cache
+
+            topic ("store_asset_cache done, #{Time.now.utc.strftime("%k:%M:%S")}")
           else
             precompile_fail(precompile.output)
           end
